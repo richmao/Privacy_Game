@@ -1,4 +1,4 @@
-//I predefine all states before creating the game.
+//predefine all states before creating the game.
 var Preloader = function() {};
 Preloader.prototype = {
 	preload: function(){
@@ -13,7 +13,25 @@ Preloader.prototype = {
 var Gameplay = function() {};
 Gameplay.prototype = {
 	create: function(){
-		player = new Player(this.game, 0, 0);
+		pl = this.game.add.group();
+		player = new Player(game, 0, 0);
+		pl.add(player);
+		
+		player.anchor.setTo(0.5, 0.5);
+		player.body.collideworldbounds = true;
+	},
+	update: function() {
+		
+		//go towards mouse pointer when mouse button down
+		if (game.input.activePointer.isDown)
+		{
+			player.rotation = game.physics.arcade.moveToPointer(player, 60, game.input.activePointer, 500) + 1.81;
+		}else{
+			//player comes to a smooth stop when mouse button is let go
+			player.body.velocity.x *= 0.9;
+			player.body.velocity.y *= 0.9;
+		}
+		
 	}
 }
 
@@ -26,6 +44,7 @@ game.state.add('Gameplay', Gameplay);
 
 //make global variables so level doesn't have to be reloaded after game over state
 var player;
+var pl;
 
 //start game preloading
 game.state.start('Preloader');
