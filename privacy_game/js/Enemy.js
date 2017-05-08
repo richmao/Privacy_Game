@@ -1,13 +1,16 @@
-function Enemy(game, x, y, velx, vely, key, frame) {
+function Enemy(game, x, y, key, frame) {
 	Phaser.Sprite.call(this, game, x, y, key, frame);
+	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.set(0.5);
-	var s = Math.random() + 0.5;
-	this.scale.x = s;
-	this.scale.y = s;
+	//var s = Math.random() + 0.5;
+	this.scale.x = 0.1;
+	this.scale.y = 0.1;
 
-	game.physics.enable(this);
-	this.body.velocity.x = velx;
-	this.body.velocity.y = vely;
+	//this.body.velocity.x = 10;
+	//this.body.velocity.y = 10;
+
+
+	console.log('enemy created');
 }
 
 //add to constructor to Enemy prototype
@@ -16,15 +19,8 @@ Enemy.prototype.constructor = Enemy;
 
 //override default update function
 Enemy.prototype.update = function() {
-
+	radians = game.physics.arcade.angleBetween(this, player);
+	degrees = radians * (180/Math.PI);
+	game.physics.arcade.velocityFromAngle(degrees, 60, this.body.velocity);
 	
-	//wrap around screen TEMPORARY FOR DUMB AI
-	if(this.x < 0 - this.width/2)
-		this.x = game.width + this.width/2;
-	else(this.x > game.width + this.width/2)
-		this.x = 0 - this.width/2;
-	if(this.y < 0 - this.height/2)
-		this.y = game.height + this.height/2;
-	else(this.y > game.height + this.height/2)
-		this.y = 0 - this.height/2;
 }

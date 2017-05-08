@@ -4,6 +4,7 @@ Preloader.prototype = {
 	preload: function(){
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		game.load.image('player', 'assets/img/cursor_prototype.png');
+		game.load.image('enemy', 'assets/img/enemy_prototype.png');
 	},
 	create: function(){
 		game.state.start('Gameplay');
@@ -13,12 +14,19 @@ Preloader.prototype = {
 var Gameplay = function() {};
 Gameplay.prototype = {
 	create: function(){
+		game.stage.backgroundColor = "#FFFFFF";
+
 		pl = this.game.add.group();
 		player = new Player(game, 0, 0);
 		pl.add(player);
 		
 		player.anchor.setTo(0.5, 0.5);
 		player.body.collideworldbounds = true;
+
+		enemies = this.game.add.group();
+
+		health = 100;
+		healthText = game.add.text(16,16, 'Health: 100', {fontSize: '32px', fill: '#000'});
 	},
 	update: function() {
 		
@@ -31,20 +39,61 @@ Gameplay.prototype = {
 			player.body.velocity.x *= 0.9;
 			player.body.velocity.y *= 0.9;
 		}
+
+		enemytimer++;
+		//every 5 seconds
+		if(enemytimer === 500){
+			console.log("spawn enemies");
+			//spawns random amount of enemies (1-10) at random location
+			for(let x = 0; x < Math.random() * 10; x++){
+				var enemy = new Enemy(game, Math.random() * game.world.width, Math.random() * game.world.height, 'enemy');
+				game.add.existing(enemy);
+				enemies.add(enemy);
+			}
+			enemytimer = 0;
+		}
+
+		//enemy collision with player
+		game.physics.arcade.overlap(player, enemies, this.enemyCollision, null, this);
 		
+		//lose condition
+		if(health == 0){
+			game.state.start('GameOver');
+		}
+
+	},
+	//enemy collision with player
+	enemyCollision: function(player, enemy) {
+		enemy.kill();
+		health -= 10;
+		healthText.text = 'Health: ' + health;
 	}
 }
 
+//Game Over state
+var GameOver = function() {};
+GameOver.prototype = {
+	preload: function(){
+	},
+	create: function(){
+		game.add.text(100, 100, 'Game Over', {fontSize: '32px', fill: '#000'});
+	}
+}
 
 //create game and new states
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'Test');
 game.state.add('Preloader', Preloader);
 game.state.add('Gameplay', Gameplay);
+game.state.add('GameOver', GameOver);
 
 
 //make global variables so level doesn't have to be reloaded after game over state
 var player;
 var pl;
+var enemytimer = 0;
+var enemies;
+var health;
+var healthText;
 
 //start game preloading
 game.state.start('Preloader');
