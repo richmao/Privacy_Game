@@ -3,8 +3,8 @@
 var Player = function (game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'player', frame);
 	
-	this.scale.x = 0.1;
-	this.scale.y = 0.1;
+	//this.scale.x = 0.1;
+	//this.scale.y = 0.1;
 	
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 };

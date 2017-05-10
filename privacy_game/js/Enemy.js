@@ -3,8 +3,8 @@ function Enemy(game, x, y, key, frame) {
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.set(0.5);
 	//var s = Math.random() + 0.5;
-	this.scale.x = 0.1;
-	this.scale.y = 0.1;
+	//this.scale.x = 0.1;
+	//this.scale.y = 0.1;
 
 	//this.body.velocity.x = 10;
 	//this.body.velocity.y = 10;
