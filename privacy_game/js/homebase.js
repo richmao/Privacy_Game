@@ -6,7 +6,7 @@ function Home(game, key, frame) {
 	this.scale.y = 0.1;
 	this.health = 100;
 
-	this.healthText = game.add.text(16,16, 'Health: 100', {fontSize: '32px', fill: '#000'});
+	this.healthText = game.add.text(16,16, 'Health: 100', {fontSize: '32px', fill: '#FFF'});
 	this.healthText.fixedToCamera = true;
 }
 
