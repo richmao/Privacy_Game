@@ -3,8 +3,10 @@ var Preloader = function() {};
 Preloader.prototype = {
 	preload: function(){
 		game.physics.startSystem(Phaser.Physics.ARCADE);
+		game.load.image('bg', 'assets/img/background.jpg');
 		game.load.image('player', 'assets/img/cursor_prototype.png');
 		game.load.image('enemy', 'assets/img/enemy_prototype.png');
+		game.load.image('home', 'assets/img/home_prototype.png');
 	},
 	create: function(){
 		game.state.start('Gameplay');
@@ -14,7 +16,7 @@ Preloader.prototype = {
 var Gameplay = function() {};
 Gameplay.prototype = {
 	create: function(){
-		game.stage.backgroundColor = "#4FFFF4";
+		background = game.add.sprite(0, 0, 'bg');
 
 		game.world.setBounds(0, 0, 1920, 1920);
 
@@ -29,9 +31,9 @@ Gameplay.prototype = {
 
 		game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.5, 0.5);
 
-		health = 100;
-		healthText = game.add.text(16,16, 'Health: 100', {fontSize: '32px', fill: '#000'});
-		healthText.fixedToCamera = true;
+		homebase = new Home(game, 'home');
+		game.add.existing(homebase);
+
 	},
 	update: function() {
 		
@@ -57,21 +59,6 @@ Gameplay.prototype = {
 			}
 			enemytimer = 0;
 		}
-
-		//enemy collision with player
-		game.physics.arcade.overlap(player, enemies, this.enemyCollision, null, this);
-		
-		//lose condition
-		if(health == 0){
-			game.state.start('GameOver');
-		}
-
-	},
-	//enemy collision with player
-	enemyCollision: function(player, enemy) {
-		enemy.kill();
-		health -= 10;
-		healthText.text = 'Health: ' + health;
 	}
 }
 
@@ -81,7 +68,7 @@ GameOver.prototype = {
 	preload: function(){
 	},
 	create: function(){
-		game.add.text(100, 100, 'Game Over', {fontSize: '32px', fill: '#000'});
+		game.add.text(100, 100, 'Game Over', {fontSize: '32px', fill: '#FFFFFF'});
 	}
 }
 
@@ -97,8 +84,7 @@ var player;
 var pl;
 var enemytimer = 0;
 var enemies;
-var health;
-var healthText;
+var homebase;
 
 //start game preloading
 game.state.start('Preloader');

@@ -19,7 +19,7 @@ Enemy.prototype.constructor = Enemy;
 
 //override default update function
 Enemy.prototype.update = function() {
-	radians = game.physics.arcade.angleBetween(this, player);
+	radians = game.physics.arcade.angleBetween(this, homebase);
 	degrees = radians * (180/Math.PI);
 	game.physics.arcade.velocityFromAngle(degrees, 60, this.body.velocity);
 	
