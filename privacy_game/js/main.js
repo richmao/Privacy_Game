@@ -14,10 +14,12 @@ Preloader.prototype = {
 var Gameplay = function() {};
 Gameplay.prototype = {
 	create: function(){
-		game.stage.backgroundColor = "#FFFFFF";
+		game.stage.backgroundColor = "#4FFFF4";
+
+		game.world.setBounds(0, 0, 1920, 1920);
 
 		pl = this.game.add.group();
-		player = new Player(game, 0, 0);
+		player = new Player(game, game.world.width/2, game.world.height/2);
 		pl.add(player);
 		
 		player.anchor.setTo(0.5, 0.5);
@@ -25,8 +27,11 @@ Gameplay.prototype = {
 
 		enemies = this.game.add.group();
 
+		game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+
 		health = 100;
 		healthText = game.add.text(16,16, 'Health: 100', {fontSize: '32px', fill: '#000'});
+		healthText.fixedToCamera = true;
 	},
 	update: function() {
 		
@@ -81,7 +86,7 @@ GameOver.prototype = {
 }
 
 //create game and new states
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'Test');
+var game = new Phaser.Game(667, 375, Phaser.AUTO, 'Test');
 game.state.add('Preloader', Preloader);
 game.state.add('Gameplay', Gameplay);
 game.state.add('GameOver', GameOver);
