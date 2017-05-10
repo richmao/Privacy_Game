@@ -27,7 +27,7 @@ Gameplay.prototype = {
 
 		enemies = this.game.add.group();
 
-		game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+		game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.5, 0.5);
 
 		health = 100;
 		healthText = game.add.text(16,16, 'Health: 100', {fontSize: '32px', fill: '#000'});
