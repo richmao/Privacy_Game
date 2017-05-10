@@ -2,11 +2,12 @@
 var Preloader = function() {};
 Preloader.prototype = {
 	preload: function(){
-		game.physics.startSystem(Phaser.Physics.ARCADE);
+		game.physics.startSystem(Phaser.Physics.P2JS);
+		game.physics.p2.setImpactEvents(true);
 		game.load.image('bg', 'assets/img/background.jpg');
-		game.load.image('player', 'assets/img/cursor_prototype.png');
-		game.load.image('enemy', 'assets/img/enemy_prototype.png');
-		game.load.image('home', 'assets/img/home_prototype.png');
+		game.load.image('player', 'assets/img/cursor.png');
+		game.load.image('enemy', 'assets/img/enemy.png');
+		game.load.image('home', 'assets/img/home.png');
 	},
 	create: function(){
 		game.state.start('Gameplay');
@@ -21,7 +22,7 @@ Gameplay.prototype = {
 		game.world.setBounds(0, 0, 1920, 1920);
 
 		pl = this.game.add.group();
-		player = new Player(game, game.world.width/2, game.world.height/2);
+		player = new Player(game, game.world.width/2 + 100, game.world.height/2);
 		pl.add(player);
 		
 		player.anchor.setTo(0.5, 0.5);
@@ -33,9 +34,11 @@ Gameplay.prototype = {
 
 		homebase = new Home(game, 'home');
 		game.add.existing(homebase);
-
 	},
 	update: function() {
+		
+		//check for collision between enemy and player
+		//game.physics.arcade.collide(enemies, pl);
 
 		enemytimer++;
 		//every 5 seconds
@@ -43,7 +46,7 @@ Gameplay.prototype = {
 			console.log("spawn enemies");
 			//spawns random amount of enemies (1-10) at random location
 			for(let x = 0; x < Math.random() * 10; x++){
-				var enemy = new Enemy(game, Math.random() * game.world.width, Math.random() * game.world.height, 'enemy');
+				var enemy = new Enemy(game, Math.random() * game.world.width, Math.random() * game.world.height, 'enemy', homebase);
 				game.add.existing(enemy);
 				enemies.add(enemy);
 			}
