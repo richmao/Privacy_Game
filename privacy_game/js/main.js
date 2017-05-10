@@ -36,16 +36,6 @@ Gameplay.prototype = {
 
 	},
 	update: function() {
-		
-		//go towards mouse pointer when mouse button down
-		if (game.input.activePointer.isDown)
-		{
-			player.rotation = game.physics.arcade.moveToPointer(player, 60, game.input.activePointer, 500) + 1.81;
-		}else{
-			//player comes to a smooth stop when mouse button is let go
-			player.body.velocity.x *= 0.9;
-			player.body.velocity.y *= 0.9;
-		}
 
 		enemytimer++;
 		//every 5 seconds
