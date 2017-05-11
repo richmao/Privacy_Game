@@ -21,10 +21,24 @@ Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 Enemy.prototype.constructor = Enemy;
 
 var homeBase;
+var shortestDistance = 9999999;
 
 //override default update function
 Enemy.prototype.update = function() {
 	accelerateToObject(this,homeBase,30);
+	
+    var dx = this.x - homeBase.x;
+    var dy = this.y - homeBase.y;
+
+    var distance = Math.sqrt(dx * dx + dy * dy);
+	
+	if (distance < shortestDistance){
+		shortestDistance = distance;
+	}
+	else if(distance > shortestDistance + 500){
+		console.log('enemy killed');
+		this.kill();
+	}
 }
 
 function accelerateToObject(obj1, obj2, speed) {
