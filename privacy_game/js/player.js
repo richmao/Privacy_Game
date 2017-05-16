@@ -4,7 +4,7 @@ var Player = function (game, x, y, frame) {
 	Phaser.Sprite.call(this, game, x, y, 'player', frame);
 	
 	game.physics.p2.enable(this, false);
-	this.body.angularDamping = 0.1;
+	this.body.angularDamping = 0.2;
 	this.body.mass = playerMass;
 	
 	this.body.whatAmI = "player";
@@ -28,18 +28,29 @@ Player.prototype.update = function() {
 	if (game.input.activePointer.isDown)
 	{
 		//only start moving after a fifth of a second had passed
-		//makes it easier to spin without interfering with movement
-		//should probably be replaced with something more elegant in the future
+		//makes it easier to spin without interfering with movement and vice versa
 		downTime += game.time.elapsed;
 		if (downTime > 200){
 			//accelerate player toward pointer location
 			accelerateToPoint(this, playerMass * acceleration)
 		}
+		else{
+			//rotate charracter when swiping across screen, equal to speed of swipe
+			if (touchY + game.camera.y < this.y){
+				this.body.angularForce += (touchX - game.input.activePointer.position.x) * -playerMass;
+			}
+			else{
+				this.body.angularForce += (touchX - game.input.activePointer.position.x) * playerMass;
+			}
+			
+			if(touchX + game.camera.x > this.x){
+				this.body.angularForce += (touchY - game.input.activePointer.position.y) * -playerMass;
+			}
+			else{
+				this.body.angularForce += (touchY - game.input.activePointer.position.y) * playerMass;
+			}
+		}
 		
-		//rotate charracter when swiping across screen, equal to speed of swipe
-		//TODO: differentiate swiping from different sides, right now it assumes from top right of character
-		this.body.angularForce += (touchX - game.input.activePointer.position.x) * -playerMass;
-		this.body.angularForce += (touchY - game.input.activePointer.position.y) * -playerMass;
 	}else{
 		//player comes to a smooth stop when mouse button is let go
 		player.body.velocity.x *= 0.9;

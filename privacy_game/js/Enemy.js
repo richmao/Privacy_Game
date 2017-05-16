@@ -6,9 +6,10 @@ function Enemy(game, x, y, key, home) {
 	
 	console.log('enemy created');
 	
-	homeBase = home;
+	this.homeBase = home;
 	
 	this.body.whatAmI = "enemy";
+	this.shortestDistance = 99999;
 	
 	//radians = game.physics.arcade.angleBetween(this, homebase);
 	//degrees = radians * (180/Math.PI);
@@ -20,24 +21,23 @@ function Enemy(game, x, y, key, home) {
 Enemy.prototype = Object.create(Phaser.Sprite.prototype);
 Enemy.prototype.constructor = Enemy;
 
-var homeBase;
-var shortestDistance = 9999999;
-
 //override default update function
 Enemy.prototype.update = function() {
-	accelerateToObject(this,homeBase,30);
 	
-    var dx = this.x - homeBase.x;
-    var dy = this.y - homeBase.y;
-
+	var dx = this.x - this.homeBase.x;
+	var dy = this.y - this.homeBase.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
 	
-	if (distance < shortestDistance){
-		shortestDistance = distance;
+	if (this.shortestDistance - distance < 0.5){
+		accelerateToObject(this,this.homeBase,30);
 	}
-	else if(distance > shortestDistance + 500){
-		console.log('enemy killed');
-		this.kill();
+	
+	if (distance < this.shortestDistance){
+		this.shortestDistance = distance;
+	}
+	else if(distance - this.shortestDistance > 500 || distance > 850){
+		console.log("enemy killed");
+		this.destroy();
 	}
 }
 

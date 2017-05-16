@@ -46,7 +46,13 @@ Gameplay.prototype = {
 			console.log("spawn enemies");
 			//spawns random amount of enemies (1-10) at random location
 			for(let x = 0; x < Math.random() * 10; x++){
-				var enemy = new Enemy(game, Math.random() * game.world.width, Math.random() * game.world.height, 'enemy', homebase);
+				
+				//spawn enemies 800 away at random angle
+				var angle = Math.random() * 6.28;
+				var randX = homebase.x + Math.cos(angle) * 800;
+				var randY = homebase.y + Math.sin(angle) * -800;
+				
+				var enemy = new Enemy(game, randX, randY, 'enemy', homebase);
 				game.add.existing(enemy);
 				enemies.add(enemy);
 			}
@@ -66,7 +72,7 @@ GameOver.prototype = {
 }
 
 //create game and new states
-var game = new Phaser.Game(667, 375, Phaser.AUTO, 'Test');
+var game = new Phaser.Game(768, 1024, Phaser.AUTO, 'Test');
 game.state.add('Preloader', Preloader);
 game.state.add('Gameplay', Gameplay);
 game.state.add('GameOver', GameOver);
