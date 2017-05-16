@@ -10,7 +10,24 @@ Preloader.prototype = {
 		game.load.image('home', 'assets/img/home.png');
 	},
 	create: function(){
-		game.state.start('Gameplay');
+		game.state.start('MainMenu');
+	}
+}
+
+var MainMenu = function(game){};
+MainMenu.prototype = {
+	preload: function(){
+		//load assets
+	},
+	create: function(){
+        game.add.text(250, 165, 'Press space to play', {fontSize: '32px', fill: '#FFF'});
+	},
+	update: function(){
+		//spacebar press to go to next state
+		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+			console.log('Goto Game');
+			game.state.start('Gameplay');
+		}
 	}
 }
 
@@ -75,6 +92,7 @@ GameOver.prototype = {
 var game = new Phaser.Game(768, 1024, Phaser.AUTO, 'Test');
 game.state.add('Preloader', Preloader);
 game.state.add('Gameplay', Gameplay);
+game.state.add('MainMenu', MainMenu);
 game.state.add('GameOver', GameOver);
 
 
