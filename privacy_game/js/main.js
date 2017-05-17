@@ -4,7 +4,7 @@ Preloader.prototype = {
 	preload: function(){
 		game.physics.startSystem(Phaser.Physics.P2JS);
 		game.physics.p2.setImpactEvents(true);
-		game.load.image('bg', 'assets/img/background.jpg');
+		game.load.image('bg', 'assets/img/background.png');
 		game.load.image('player', 'assets/img/cursor.png');
 		game.load.image('enemy', 'assets/img/enemy.png');
 		game.load.image('home', 'assets/img/home.png');
@@ -37,7 +37,7 @@ Gameplay.prototype = {
 	create: function(){
 		background = game.add.sprite(0, 0, 'bg');
 
-		game.world.setBounds(0, 0, 1920, 1920);
+		game.world.setBounds(0, 0, 2048, 2048);
 
 		pl = this.game.add.group();
 		player = new Player(game, game.world.width/2 + 100, game.world.height/2);
