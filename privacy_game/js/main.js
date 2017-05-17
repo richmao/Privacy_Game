@@ -8,6 +8,7 @@ Preloader.prototype = {
 		game.load.image('player', 'assets/img/cursor.png');
 		game.load.image('enemy', 'assets/img/enemy.png');
 		game.load.image('home', 'assets/img/home.png');
+		game.load.audio('music', ['assets/audio/track3.mp3', 'assets/audio/track3.ogg']);
 	},
 	create: function(){
 		game.state.start('MainMenu');
@@ -51,6 +52,10 @@ Gameplay.prototype = {
 
 		homebase = new Home(game, 'home');
 		game.add.existing(homebase);
+
+		music = game.add.audio('music');
+        music.loop = true;
+    	music.play();
 	},
 	update: function() {
 		
