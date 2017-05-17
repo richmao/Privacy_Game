@@ -84,7 +84,13 @@ GameOver.prototype = {
 	preload: function(){
 	},
 	create: function(){
-		game.add.text(100, 100, 'Game Over', {fontSize: '32px', fill: '#FFFFFF'});
+		game.add.text(100, 100, 'Game Over, press space to play again', {fontSize: '32px', fill: '#FFFFFF'});
+	},
+	update: function(){
+		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
+			console.log('Goto Menu');
+			game.state.start('MainMenu');
+		}
 	}
 }
 
