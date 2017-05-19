@@ -22,6 +22,7 @@ MainMenu.prototype = {
 	},
 	create: function(){
         game.add.text(250, 165, 'Press space to play', {fontSize: '32px', fill: '#FFF'});
+        game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 	},
 	update: function(){
 		//spacebar press to go to next state
@@ -29,6 +30,19 @@ MainMenu.prototype = {
 			console.log('Goto Game');
 			game.state.start('Gameplay');
 		}
+		game.input.onDown.add(this.gofull, this);
+	},
+	gofull: function() {
+
+	    if (game.scale.isFullScreen)
+	    {
+	        game.scale.stopFullScreen();
+	    }
+	    else
+	    {
+	        game.scale.startFullScreen(false);
+	    }
+
 	}
 }
 
@@ -48,7 +62,7 @@ Gameplay.prototype = {
 
 		enemies = this.game.add.group();
 
-		game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.5, 0.5);
+		//game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.5, 0.5);
 
 		homebase = new Home(game, 'home');
 		game.add.existing(homebase);
@@ -100,7 +114,7 @@ GameOver.prototype = {
 }
 
 //create game and new states
-var game = new Phaser.Game(768, 1024, Phaser.AUTO, 'Test');
+var game = new Phaser.Game(2048, 2048, Phaser.AUTO, 'Test');
 game.state.add('Preloader', Preloader);
 game.state.add('Gameplay', Gameplay);
 game.state.add('MainMenu', MainMenu);
