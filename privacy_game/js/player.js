@@ -33,10 +33,10 @@ Player.prototype.update = function() {
     }
 
     if (this.cursors.left.isDown) {
-        this.body.rotation -= 5;
+        this.body.rotation -= 3;
     }
     else if (this.cursors.right.isDown) {
-        this.body.rotation += 5;
+        this.body.rotation += 3;
     }
 
 	if(this.fireKey.justPressed()){
@@ -74,7 +74,9 @@ Player.prototype.move = function(object, distance) {
 }
 
 Player.prototype.collect = function(player, powerup) {
-	this.currPowerup = powerup.id;
-	powerup.kill();
-	this.powerupText.text = 'Power Up: ' + this.currPowerup;
+	if (this.currPowerup == "None"){
+		this.currPowerup = powerup.id;
+		powerup.kill();
+		this.powerupText.text = 'Power Up: ' + this.currPowerup;
+	}
 }

@@ -116,6 +116,7 @@ Gameplay.prototype = {
 			var randY = homebase.y + Math.sin(angle) * -300;
 			var PU = new Dash(game, randX, randY, 'Dash');
 			powerups.add(PU);
+			PUtimer = 0;
 		}
 		game.world.bringToTop(bullets);
 		game.world.bringToTop(pl);
