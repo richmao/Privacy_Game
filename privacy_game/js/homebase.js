@@ -1,6 +1,5 @@
 function Home(game, key, frame) {
 	Phaser.Sprite.call(this, game, game.world.width/2, game.world.height/2, key, frame);
-	//game.physics.p2.enable(this, false);
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.set(0.5);
 	this.health = 100;
@@ -14,8 +13,6 @@ function Home(game, key, frame) {
 	this.healthText.fixedToCamera = true;
 	
 	this.body.static = true;
-	
-	this.body.whatAmI = "home";
 }
 
 //add to constructor to Home prototype
@@ -46,4 +43,8 @@ Home.prototype.homeHit = function(home, enemy) {
 		enemy.kill();
 		this.health -= 10;
 		this.healthText.text = 'Health: ' + this.health;
+		if(this.health == 10){
+			aboutToLose.play();
+		}
+		//enemyEnterSounds[Math.floor(Math.random() * 3)].play();
 }

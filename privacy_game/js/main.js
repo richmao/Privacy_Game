@@ -8,8 +8,23 @@ Preloader.prototype = {
 		game.load.image('home', 'assets/img/home.png');
 		game.load.image('bullet', 'assets/img/bullet.png');
 		game.load.audio('music', ['assets/audio/track3.mp3', 'assets/audio/track3.ogg']);
+		game.load.audio('aboutToLose', ['assets/audio/enemy/aboutToLose.mp3', 'assets/audio/enemy/aboutToLose.ogg']);
+		game.load.audio('enemyDeath1', ['assets/audio/enemy/enemyDeath.mp3', 'assets/audio/enemy/enemyDeath.ogg']);
+		game.load.audio('enemyDeath2', ['assets/audio/enemy/enemyDeath2.mp3', 'assets/audio/enemy/enemyDeath2.ogg']);
+		game.load.audio('enemyEnter1', ['assets/audio/enemy/enemyEntersSafe1.mp3', 'assets/audio/enemy/enemyEntersSafe1.ogg']);
+		game.load.audio('enemyEnter2', ['assets/audio/enemy/enemyEntersSafe2.mp3', 'assets/audio/enemy/enemyEntersSafe2.ogg']);
+		game.load.audio('enemyEnter3', ['assets/audio/enemy/enemyEntersSafe3.mp3', 'assets/audio/enemy/enemyEntersSafe3.ogg']);
 	},
 	create: function(){
+		aboutToLose = game.add.audio('aboutToLose');
+		enemyDeath1 = game.add.audio('enemyDeath1');
+		enemyDeath2 = game.add.audio('enemyDeath2');
+		enemyEnter1 = game.add.audio('enemyEnter1');
+		enemyEnter2 = game.add.audio('enemyEnter2');
+		enemyEnter3 = game.add.audio('enemyEnter3');
+		enemyEnterSounds = [enemyEnter1, enemyEnter2, enemyEnter3];
+		enemyDeathSounds = [enemyDeath1, enemyDeath2];
+
 		game.state.start('MainMenu');
 	}
 }
@@ -22,7 +37,7 @@ MainMenu.prototype = {
 	create: function(){
         game.add.text(250, 165, 'Press space to play', {fontSize: '32px', fill: '#FFF'});
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this.gofull();
+        //this.gofull();
 	},
 	update: function(){
 		//spacebar press to go to next state
@@ -141,6 +156,8 @@ var enemytimer = 0;
 var enemies;
 var homebase;
 var bullets;
+var enemyEnterSounds;
+var enemyDeathSounds;
 
 //start game preloading
 game.state.start('Preloader');

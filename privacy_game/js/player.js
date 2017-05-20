@@ -6,13 +6,12 @@ var Player = function (game, x, y, frame) {
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.x = 0.5;
 	this.anchor.y = 0;
-	this.body.whatAmI = "player";
 
-	this.fireRate = 100;
-	this.nextFire = 0;
 	this.scale.setTo(0.5);
 	this.totalBullets = 5;
 	this.numBullets = 0;
+	this.speed = 2;
+
 	this.cursors = game.input.keyboard.createCursorKeys();
 	this.fireKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 };
@@ -22,10 +21,10 @@ Player.prototype.constructor = Player;
 
 Player.prototype.update = function() {
 	if (this.cursors.up.isDown) {
-        this.move(this, 6);
+        this.move(this, this.speed);
     }
     else if (this.cursors.down.isDown) {
-    	this.move(this, -6);
+    	this.move(this, -this.speed);
     }
 
     if (this.cursors.left.isDown) {
@@ -41,15 +40,14 @@ Player.prototype.update = function() {
 };
 
 Player.prototype.fire = function(){
-		if (this.numBullets < this.totalBullets){
-	        console.log('fired');
-	        var bullet = new Bullet(game, this.x, this.y, 'bullet');
-	        bullets.add(bullet);
-	        bullet.rotation = this.rotation;
-	        game.physics.arcade.velocityFromRotation(this.rotation - (90 * (Math.PI / 180)), 600, bullet.body.velocity);
-    		this.numBullets++;
-    	}
-
+	if (this.numBullets < this.totalBullets){
+        console.log('fired');
+        var bullet = new Bullet(game, this.x, this.y, 'bullet');
+        bullets.add(bullet);
+        bullet.rotation = this.rotation;
+        game.physics.arcade.velocityFromRotation(this.rotation - (90 * (Math.PI / 180)), 600, bullet.body.velocity);
+		this.numBullets++;
+	}
 }
 
 Player.prototype.move = function(object, distance) {

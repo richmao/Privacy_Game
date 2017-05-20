@@ -2,24 +2,15 @@ function Bullet(game, x, y, key,) {
 	Phaser.Sprite.call(this, game, x, y, key);
 
 	game.physics.enable(this, Phaser.Physics.ARCADE);
-	
+
 	//game.physics.p2.enable(this, false);
 	this.anchor.set(0.5);
 	//var s = Math.random() + 0.5;
 	
 	console.log('bullet created');
-	
-	
-	this.body.whatAmI = "bullet";
-
 
 	this.checkWorldBounds = true;
 	this.events.onOutOfBounds.add(this.bulletOut, this);
-	
-	//radians = game.physics.arcade.angleBetween(this, homebase);
-	//degrees = radians * (180/Math.PI);
-	//game.physics.arcade.velocityFromAngle(degrees, 60, this.body.velocity);
-	
 }
 
 //add to constructor to Bullet prototype
