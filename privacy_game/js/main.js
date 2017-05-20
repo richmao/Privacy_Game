@@ -7,6 +7,7 @@ Preloader.prototype = {
 		game.load.image('enemy', 'assets/img/enemy.png');
 		game.load.image('home', 'assets/img/home.png');
 		game.load.image('bullet', 'assets/img/bullet.png');
+		game.load.image('Dash', 'assets/img/powerup.png');
 		game.load.audio('music', ['assets/audio/track3.mp3', 'assets/audio/track3.ogg']);
 		game.load.audio('aboutToLose', ['assets/audio/enemy/aboutToLose.mp3', 'assets/audio/enemy/aboutToLose.ogg']);
 		game.load.audio('enemyDeath1', ['assets/audio/enemy/enemyDeath.mp3', 'assets/audio/enemy/enemyDeath.ogg']);
@@ -35,7 +36,7 @@ MainMenu.prototype = {
 		//load assets
 	},
 	create: function(){
-        game.add.text(250, 165, 'Press space to play', {fontSize: '32px', fill: '#FFF'});
+        game.add.text(16, 165, 'Press space to play.\nArrow keys to move, space to shoot, q to use powerup', {fontSize: '32px', fill: '#FFF'});
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
         //this.gofull();
 	},
@@ -79,6 +80,8 @@ Gameplay.prototype = {
 
 		bullets = this.game.add.group();
 
+		powerups = this.game.add.group();
+
 		homebase = new Home(game, 'home');
 		game.add.existing(homebase);
 
@@ -89,10 +92,10 @@ Gameplay.prototype = {
 	update: function() {
 		enemytimer++;
 		//every 5 seconds
-		if(enemytimer === 500){
+		if(enemytimer == 500){
 			console.log("spawn enemies");
 			//spawns random amount of enemies (1-10) at random location
-			for(let x = 0; x < Math.random() * (10 + diffmultiplier); x++){
+			for(let x = 0; x < Math.random() * 5; x++){
 				
 				//spawn enemies 300 away at random angle
 				var angle = Math.random() * 6.28;
@@ -104,6 +107,15 @@ Gameplay.prototype = {
 				enemies.add(enemy);
 			}
 			enemytimer = 0;
+		}
+
+		PUtimer++;
+		if(PUtimer == 1000){
+			var angle = Math.random() * 6.28;
+			var randX = homebase.x + Math.cos(angle) * 300;
+			var randY = homebase.y + Math.sin(angle) * -300;
+			var PU = new Dash(game, randX, randY, 'Dash');
+			powerups.add(PU);
 		}
 		game.world.bringToTop(bullets);
 		game.world.bringToTop(pl);
@@ -153,9 +165,11 @@ var player;
 var pl;
 var diffmultiplier;
 var enemytimer = 0;
+var PUtimer = 0;
 var enemies;
 var homebase;
 var bullets;
+var powerups;
 var enemyEnterSounds;
 var enemyDeathSounds;
 

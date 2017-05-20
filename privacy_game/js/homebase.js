@@ -33,7 +33,7 @@ Home.prototype.update = function() {
 		this.scoreText.text = 'Score: ' + this.score;
 	}
 
-	diffmultiplier = (this.score * 0.1);
+	diffmultiplier = (this.score * 0.5);
 	
 	game.physics.arcade.overlap(enemies, homebase, this.homeHit, null, this);
 }

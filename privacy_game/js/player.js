@@ -12,8 +12,13 @@ var Player = function (game, x, y, frame) {
 	this.numBullets = 0;
 	this.speed = 2;
 
+	this.currPowerup = "None";
+	this.powerupText = game.add.text(game.world.width - 400, game.world.height - 48, 'Power Up: None', {fontSize: '32px', fill: '#FFF'});
+	this.powerupText.fixedToCamera = true;
+
 	this.cursors = game.input.keyboard.createCursorKeys();
 	this.fireKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	this.PUKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
 };
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -37,6 +42,19 @@ Player.prototype.update = function() {
 	if(this.fireKey.justPressed()){
 		this.fire();
 	}
+
+	if(this.PUKey.justPressed()){
+		//use powerup
+		if(this.currPowerup == 'Dash'){
+			player.speed += 2;
+		}
+
+		this.currPowerup = "None";
+		this.powerupText.text = 'Power Up: ' + this.currPowerup;
+	}
+
+	game.physics.arcade.overlap(powerups, player, this.collect, null, this);
+
 };
 
 Player.prototype.fire = function(){
@@ -53,4 +71,10 @@ Player.prototype.fire = function(){
 Player.prototype.move = function(object, distance) {
 	object.body.x = object.body.x + distance * Math.cos(object.rotation - (90 * (Math.PI / 180)));
 	object.body.y = object.body.y + distance * Math.sin(object.rotation - (90 * (Math.PI / 180)));
+}
+
+Player.prototype.collect = function(player, powerup) {
+	this.currPowerup = powerup.id;
+	powerup.kill();
+	this.powerupText.text = 'Power Up: ' + this.currPowerup;
 }
