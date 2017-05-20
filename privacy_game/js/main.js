@@ -2,12 +2,11 @@
 var Preloader = function() {};
 Preloader.prototype = {
 	preload: function(){
-		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.setImpactEvents(true);
 		game.load.image('bg', 'assets/img/background.png');
 		game.load.image('player', 'assets/img/cursor.png');
 		game.load.image('enemy', 'assets/img/enemy.png');
 		game.load.image('home', 'assets/img/home.png');
+		game.load.image('bullet', 'assets/img/bullet.png');
 		game.load.audio('music', ['assets/audio/track3.mp3', 'assets/audio/track3.ogg']);
 	},
 	create: function(){
@@ -22,7 +21,8 @@ MainMenu.prototype = {
 	},
 	create: function(){
         game.add.text(250, 165, 'Press space to play', {fontSize: '32px', fill: '#FFF'});
-        game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+        game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.gofull();
 	},
 	update: function(){
 		//spacebar press to go to next state
@@ -30,7 +30,7 @@ MainMenu.prototype = {
 			console.log('Goto Game');
 			game.state.start('Gameplay');
 		}
-		game.input.onDown.add(this.gofull, this);
+		//game.input.onDown.add(this.gofull, this);
 	},
 	gofull: function() {
 
@@ -51,18 +51,18 @@ Gameplay.prototype = {
 	create: function(){
 		background = game.add.sprite(0, 0, 'bg');
 
-		game.world.setBounds(0, 0, 2048, 2048);
+		game.world.setBounds(0, 0, 1024, 576);
 
 		pl = this.game.add.group();
-		player = new Player(game, game.world.width/2 + 100, game.world.height/2);
+		player = new Player(game, game.world.width/2, game.world.height/2);
 		pl.add(player);
 		
 		player.anchor.setTo(0.5, 0.5);
-		player.body.collideworldbounds = true;
+		player.body.collideWorldBounds = true;
 
 		enemies = this.game.add.group();
 
-		//game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.5, 0.5);
+		bullets = this.game.add.group();
 
 		homebase = new Home(game, 'home');
 		game.add.existing(homebase);
@@ -72,21 +72,17 @@ Gameplay.prototype = {
     	music.play();
 	},
 	update: function() {
-		
-		//check for collision between enemy and player
-		//game.physics.arcade.collide(enemies, pl);
-
 		enemytimer++;
 		//every 5 seconds
 		if(enemytimer === 500){
 			console.log("spawn enemies");
 			//spawns random amount of enemies (1-10) at random location
-			for(let x = 0; x < Math.random() * 10; x++){
+			for(let x = 0; x < Math.random() * (10 + diffmultiplier); x++){
 				
-				//spawn enemies 800 away at random angle
+				//spawn enemies 300 away at random angle
 				var angle = Math.random() * 6.28;
-				var randX = homebase.x + Math.cos(angle) * 800;
-				var randY = homebase.y + Math.sin(angle) * -800;
+				var randX = homebase.x + Math.cos(angle) * 300;
+				var randY = homebase.y + Math.sin(angle) * -300;
 				
 				var enemy = new Enemy(game, randX, randY, 'enemy', homebase);
 				game.add.existing(enemy);
@@ -94,6 +90,21 @@ Gameplay.prototype = {
 			}
 			enemytimer = 0;
 		}
+		game.world.bringToTop(bullets);
+		game.world.bringToTop(pl);
+	},
+	render: function(){
+		 // enemies.forEach(function(enemy) {
+		 // 	game.debug.body(enemy);
+		 // }, this);
+
+
+		 // bullets.forEach(function(bullet) {
+		 // 	game.debug.body(bullet);
+		 // }, this);
+
+		 // game.debug.body(player);
+		 // game.debug.body(homebase);
 	}
 }
 
@@ -108,13 +119,14 @@ GameOver.prototype = {
 	update: function(){
 		if(game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
 			console.log('Goto Menu');
+			music.stop();
 			game.state.start('MainMenu');
 		}
 	}
 }
 
 //create game and new states
-var game = new Phaser.Game(2048, 2048, Phaser.AUTO, 'Test');
+var game = new Phaser.Game(1024, 576, Phaser.AUTO, 'Test');
 game.state.add('Preloader', Preloader);
 game.state.add('Gameplay', Gameplay);
 game.state.add('MainMenu', MainMenu);
@@ -124,9 +136,11 @@ game.state.add('GameOver', GameOver);
 //make global variables so level doesn't have to be reloaded after game over state
 var player;
 var pl;
+var diffmultiplier;
 var enemytimer = 0;
 var enemies;
 var homebase;
+var bullets;
 
 //start game preloading
 game.state.start('Preloader');

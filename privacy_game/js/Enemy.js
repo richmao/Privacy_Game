@@ -1,6 +1,7 @@
 function Enemy(game, x, y, key, home) {
 	Phaser.Sprite.call(this, game, x, y, key);
-	game.physics.p2.enable(this, false);
+	//game.physics.p2.enable(this, false);
+	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.set(0.5);
 	//var s = Math.random() + 0.5;
 	
@@ -11,9 +12,9 @@ function Enemy(game, x, y, key, home) {
 	this.body.whatAmI = "enemy";
 	this.shortestDistance = 99999;
 	
-	//radians = game.physics.arcade.angleBetween(this, homebase);
-	//degrees = radians * (180/Math.PI);
-	//game.physics.arcade.velocityFromAngle(degrees, 60, this.body.velocity);
+	radians = game.physics.arcade.angleBetween(this, homebase);
+	degrees = radians * (180/Math.PI);
+	game.physics.arcade.velocityFromAngle(degrees, 60 + diffmultiplier, this.body.velocity);
 	
 }
 
@@ -24,27 +25,20 @@ Enemy.prototype.constructor = Enemy;
 //override default update function
 Enemy.prototype.update = function() {
 	
-	var dx = this.x - this.homeBase.x;
-	var dy = this.y - this.homeBase.y;
-    var distance = Math.sqrt(dx * dx + dy * dy);
+	// var dx = this.x - this.homeBase.x;
+	// var dy = this.y - this.homeBase.y;
+ //    var distance = Math.sqrt(dx * dx + dy * dy);
 	
-	if (this.shortestDistance - distance < 0.5){
-		accelerateToObject(this,this.homeBase,30);
-	}
+	// if (this.shortestDistance - distance < 0.5){
+	// 	accelerateToObject(this,this.homeBase,30);
+	// }
 	
-	if (distance < this.shortestDistance){
-		this.shortestDistance = distance;
-	}
-	else if(distance - this.shortestDistance > 500 || distance > 850){
-		console.log("enemy killed");
-		this.destroy();
-	}
+	// if (distance < this.shortestDistance){
+	// 	this.shortestDistance = distance;
+	// }
+	// else if(distance - this.shortestDistance > 500 || distance > 850){
+	// 	console.log("enemy killed");
+	// 	this.destroy();
+	// }
 }
 
-function accelerateToObject(obj1, obj2, speed) {
-    if (typeof speed === 'undefined') { speed = 60; }
-    var angle = Math.atan2(obj2.y - obj1.y, obj2.x - obj1.x);
-    obj1.body.rotation = angle + game.math.degToRad(90);  // correct angle of angry bullets (depends on the sprite used)
-    obj1.body.force.x = Math.cos(angle) * speed;    // accelerateToObject 
-    obj1.body.force.y = Math.sin(angle) * speed;
-}

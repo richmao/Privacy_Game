@@ -1,15 +1,16 @@
 function Home(game, key, frame) {
 	Phaser.Sprite.call(this, game, game.world.width/2, game.world.height/2, key, frame);
-	game.physics.p2.enable(this, false);
+	//game.physics.p2.enable(this, false);
+	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.set(0.5);
 	this.health = 100;
 	this.score = 0;
 	this.scoretimer = 0;
 
-	this.scoreText = game.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#FFF'});
+	this.scoreText = game.add.text(16, game.world.height - 48, 'Score: 0', {fontSize: '32px', fill: '#FFF'});
 	this.scoreText.fixedToCamera = true;
 
-	this.healthText = game.add.text(300,16, 'Health: 100', {fontSize: '32px', fill: '#FFF'});
+	this.healthText = game.add.text(300,game.world.height - 48, 'Health: 100', {fontSize: '32px', fill: '#FFF'});
 	this.healthText.fixedToCamera = true;
 	
 	this.body.static = true;
@@ -35,16 +36,14 @@ Home.prototype.update = function() {
 		this.scoreText.text = 'Score: ' + this.score;
 	}
 
-	//enemy collision with home
-	this.body.onBeginContact.add(homeHit, this);
+	diffmultiplier = (this.score * 0.1);
+	
+	game.physics.arcade.overlap(enemies, homebase, this.homeHit, null, this);
 }
 
 //enemy collision with home
-function homeHit (body, bodyB, shapeA, shapeB, equation) {
-	console.log(body.whatAmI);
-	if (body.whatAmI == "enemy"){
-		body.sprite.kill();
+Home.prototype.homeHit = function(home, enemy) {
+		enemy.kill();
 		this.health -= 10;
 		this.healthText.text = 'Health: ' + this.health;
-	}
 }
