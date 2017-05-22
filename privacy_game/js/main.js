@@ -92,15 +92,15 @@ Gameplay.prototype = {
 	update: function() {
 		enemytimer++;
 		//every 5 seconds
-		if(enemytimer == 500){
+		if(enemytimer >= (Math.random() * 300) + 300){
 			console.log("spawn enemies");
 			//spawns random amount of enemies (1-10) at random location
-			for(let x = 0; x < Math.random() * 5; x++){
+			for(let x = 0; x < Math.random() * 3; x++){
 				
 				//spawn enemies 300 away at random angle
 				var angle = Math.random() * 6.28;
-				var randX = homebase.x + Math.cos(angle) * 300;
-				var randY = homebase.y + Math.sin(angle) * -300;
+				var randX = homebase.x + Math.cos(angle) * 250;
+				var randY = homebase.y + Math.sin(angle) * -250;
 				
 				var enemy = new Enemy(game, randX, randY, 'enemy', homebase);
 				game.add.existing(enemy);
@@ -110,10 +110,10 @@ Gameplay.prototype = {
 		}
 
 		PUtimer++;
-		if(PUtimer == 1000){
+		if(PUtimer >= (Math.random() * 600) + 500){
 			var angle = Math.random() * 6.28;
-			var randX = homebase.x + Math.cos(angle) * 300;
-			var randY = homebase.y + Math.sin(angle) * -300;
+			var randX = homebase.x + Math.cos(angle) * 250;
+			var randY = homebase.y + Math.sin(angle) * -250;
 			var PU = new Dash(game, randX, randY, 'Dash');
 			powerups.add(PU);
 			PUtimer = 0;

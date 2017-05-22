@@ -6,6 +6,7 @@ var Player = function (game, x, y, frame) {
 	game.physics.enable(this, Phaser.Physics.ARCADE);
 	this.anchor.x = 0.5;
 	this.anchor.y = 0;
+	this.body.drag = 10;
 
 	this.scale.setTo(0.5);
 	this.totalBullets = 5;
